@@ -1,0 +1,40 @@
+{
+  "input_file": "processed_data/clean/train.jsonl",
+  "output_file": "processed_data/optimized/train_balanced.jsonl",
+  "target_types": [
+    "其他治疗"
+  ],
+  "target_entity_count": 300,
+  "max_extra_copies_per_record": 4,
+  "seed": 42,
+  "original_num_samples": 5184,
+  "balanced_num_samples": 5408,
+  "added_samples": 224,
+  "added_samples_by_target_type": {
+    "其他治疗": 224
+  },
+  "before_entity_counts": {
+    "中医治则": 297,
+    "中医治疗": 1081,
+    "中医证候": 1147,
+    "中医诊断": 244,
+    "中药": 2770,
+    "临床表现": 3047,
+    "其他治疗": 65,
+    "方剂": 1003,
+    "西医治疗": 461,
+    "西医诊断": 2406
+  },
+  "after_entity_counts": {
+    "中医治则": 297,
+    "中医治疗": 1126,
+    "中医证候": 1207,
+    "中医诊断": 251,
+    "中药": 2821,
+    "临床表现": 3047,
+    "其他治疗": 300,
+    "方剂": 1030,
+    "西医治疗": 461,
+    "西医诊断": 2579
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "train": {
+    "source_file": "data/medical.train",
+    "output_file": "processed_data/train.jsonl",
+    "num_samples": 5259,
+    "max_text_characters": 143,
+    "average_text_characters": 37.99,
+    "entity_counts": {
+      "中医治则": 297,
+      "中医治疗": 1081,
+      "中医证候": 1170,
+      "中医诊断": 246,
+      "中药": 2786,
+      "临床表现": 3068,
+      "其他治疗": 65,
+      "方剂": 1012,
+      "西医治疗": 465,
+      "西医诊断": 2444
+    }
+  },
+  "validation": {
+    "source_file": "data/medical.dev",
+    "output_file": "processed_data/validation.jsonl",
+    "num_samples": 657,
+    "max_text_characters": 127,
+    "average_text_characters": 38.0,
+    "entity_counts": {
+      "中医治则": 53,
+      "中医治疗": 111,
+      "中医证候": 136,
+      "中医诊断": 42,
+      "中药": 429,
+      "临床表现": 369,
+      "其他治疗": 8,
+      "方剂": 120,
+      "西医治疗": 44,
+      "西医诊断": 308
+    }
+  },
+  "test": {
+    "source_file": "data/medical.test",
+    "output_file": "processed_data/test.jsonl",
+    "num_samples": 658,
+    "max_text_characters": 118,
+    "average_text_characters": 36.51,
+    "entity_counts": {
+      "中医治则": 47,
+      "中医治疗": 133,
+      "中医证候": 158,
+      "中医诊断": 48,
+      "中药": 262,
+      "临床表现": 375,
+      "其他治疗": 12,
+      "方剂": 111,
+      "西医治疗": 53,
+      "西医诊断": 330
+    }
+  }
+}

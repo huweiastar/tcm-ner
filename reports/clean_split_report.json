@@ -1,0 +1,1076 @@
+{
+  "priority_rule": "保留优先级为 test > validation > train；不覆盖原始 processed_data。",
+  "within_conflict_policy": "keep_first",
+  "original_sample_counts": {
+    "train": 5259,
+    "validation": 657,
+    "test": 658
+  },
+  "clean_sample_counts": {
+    "train": 5184,
+    "validation": 654,
+    "test": 658
+  },
+  "removed_sample_counts": {
+    "train": 75,
+    "validation": 3,
+    "test": 0
+  },
+  "removed_records": {
+    "train": [
+      {
+        "removed_id": "train-000468",
+        "kept_id": "train-000155",
+        "text": "结论：运脾消食汤合多潘立酮治疗脾虚食滞型功能性消化不良临床疗效显著，且可明显改善临床症状",
+        "reason": "same_split_annotation_conflict_keep_first",
+        "kept_entities": [
+          {
+            "entity": "脾虚食滞",
+            "type": "中医证候",
+            "start": 15,
+            "end": 19
+          },
+          {
+            "entity": "功能性消化不良",
+            "type": "西医诊断",
+            "start": 20,
+            "end": 27
+          }
+        ],
+        "removed_entities": [
+          {
+            "entity": "功能性消化不良",
+            "type": "西医诊断",
+            "start": 20,
+            "end": 27
+          }
+        ]
+      },
+      {
+        "removed_id": "train-000594",
+        "kept_id": "train-000171",
+        "text": "厚朴１０ｇ",
+        "reason": "same_split_exact_duplicate"
+      },
+      {
+        "removed_id": "train-000938",
+        "kept_id": "train-000491",
+        "text": "结论：在常规治疗的基础上加用加味三香汤治疗肝郁脾虚型功能性消化不良患者能进一步提高临床治疗效果，改善患者的抑郁焦虑状况",
+        "reason": "same_split_exact_duplicate"
+      },
+      {
+        "removed_id": "train-001075",
+        "kept_id": "train-000954",
+        "text": "槟榔１０ｇ",
+        "reason": "same_split_exact_duplicate"
+      },
+      {
+        "removed_id": "train-001474",
+        "kept_id": "train-000073",
+        "text": "枳实１０ｇ",
+        "reason": "same_split_exact_duplicate"
+      },
+      {
+        "removed_id": "train-001484",
+        "kept_id": "train-000947",
+        "text": "目的：观察运脾消食汤合多潘立酮治疗脾虚食滞型功能性消化不良（ＦＤ）的临床疗效",
+        "reason": "same_split_annotation_conflict_keep_first",
+        "kept_entities": [
+          {
+            "entity": "功能性消化不良",
+            "type": "西医诊断",
+            "start": 22,
+            "end": 29
+          }
+        ],
+        "removed_entities": [
+          {
+            "entity": "脾虚食滞",
+            "type": "中医证候",
+            "start": 17,
+            "end": 21
+          }
+        ]
+      },
+      {
+        "removed_id": "train-001652",
+        "kept_id": "train-000074",
+        "text": "方选小柴胡汤加味",
+        "reason": "same_split_exact_duplicate"
+      },
+      {
+        "removed_id": "train-001682",
+        "kept_id": "train-001149",
+        "text": "功能性消化不良是临床上常见的一种功能性胃肠病，但由于发病机理尚未完全阐明，迄今尚无特别有效的治疗药物，且易于复发",
+        "reason": "same_split_exact_duplicate"
+      },
+      {
+        "removed_id": "train-001786",
+        "kept_id": "train-000155",
+        "text": "结论：运脾消食汤合多潘立酮治疗脾虚食滞型功能性消化不良临床疗效显著，且可明显改善临床症状",
+        "reason": "same_split_annotation_conflict_keep_first",
+        "kept_entities": [
+          {
+            "entity": "脾虚食滞",
+            "type": "中医证候",
+            "start": 15,
+            "end": 19
+          },
+          {
+            "entity": "功能性消化不良",
+            "type": "西医诊断",
+            "start": 20,
+            "end": 27
+          }
+        ],
+        "removed_entities": [
+          {
+            "entity": "功能性消化不良",
+            "type": "西医诊断",
+            "start": 20,
+            "end": 27
+          }
+        ]
+      },
+      {
+        "removed_id": "train-001913",
+        "kept_id": "train-000947",
+        "text": "目的：观察运脾消食汤合多潘立酮治疗脾虚食滞型功能性消化不良（ＦＤ）的临床疗效",
+        "reason": "same_split_annotation_conflict_keep_first",
+        "kept_entities": [
+          {
+            "entity": "功能性消化不良",
+            "type": "西医诊断",
+            "start": 22,
+            "end": 29
+          }
+        ],
+        "removed_entities": [
+          {
+            "entity": "运脾消食汤",
+            "type": "方剂",
+            "start": 5,
+            "end": 10
+          },
+          {
+            "entity": "脾虚食滞",
+            "type": "中医证候",
+            "start": 17,
+            "end": 21
+          }
+        ]
+      },
+      {
+        "removed_id": "train-002013",
+        "kept_id": "train-001274",
+        "text": "柴胡、延胡索各１０ｇ",
+        "reason": "same_split_exact_duplicate"
+      },
+      {
+        "removed_id": "train-002239",
+        "kept_id": "train-000947",
+        "text": "目的：观察运脾消食汤合多潘立酮治疗脾虚食滞型功能性消化不良（ＦＤ）的临床疗效",
+        "reason": "same_split_exact_duplicate"
+      },
+      {
+        "removed_id": "train-002357",
+        "kept_id": "train-000155",
+        "text": "结论：运脾消食汤合多潘立酮治疗脾虚食滞型功能性消化不良临床疗效显著，且可明显改善临床症状",
+        "reason": "same_split_annotation_conflict_keep_first",
+        "kept_entities": [
+          {
+            "entity": "脾虚食滞",
+            "type": "中医证候",
+            "start": 15,
+            "end": 19
+          },
+          {
+            "entity": "功能性消化不良",
+            "type": "西医诊断",
+            "start": 20,
+            "end": 27
+          }
+        ],
+        "removed_entities": [
+          {
+            "entity": "运脾消食汤",
+            "type": "方剂",
+            "start": 3,
+            "end": 8
+          },
+          {
+            "entity": "脾虚食滞",
+            "type": "中医证候",
+            "start": 15,
+            "end": 19
+          }
+        ]
+      },
+      {
+        "removed_id": "train-002385",
+        "kept_id": "train-000530",
+        "text": "功能性消化不良；运脾消食汤；多潘立酮",
+        "reason": "same_split_exact_duplicate"
+      },
+      {
+        "removed_id": "train-002428",
+        "kept_id": "train-001701",
+        "text": "茵陈３０ｇ",
+        "reason": "same_split_exact_duplicate"
+      },
+      {
+        "removed_id": "train-002490",
+        "kept_id": "train-001701",
+        "text": "茵陈３０ｇ",
+        "reason": "same_split_exact_duplicate"
+      },
+      {
+        "removed_id": "train-002586",
+        "kept_id": "train-002184",
+        "text": "为观察铁皮枫斗颗粒（胶囊）治疗慢性萎缩性胃炎气阴两虚证的临床疗效，将１８５例患者随机分为铁皮枫斗颗粒组（７３例）、铁皮枫斗胶囊组（７６例）和生脉胶囊组（３６例），观察各组治疗前后症状积分等指标，疗程均为３０天",
+        "reason": "same_split_annotation_conflict_keep_first",
+        "kept_entities": [
+          {
+            "entity": "慢性萎缩性胃炎",
+            "type": "西医诊断",
+            "start": 15,
+            "end": 22
+          },
+          {
+            "entity": "气阴两虚",
+            "type": "中医证候",
+            "start": 22,
+            "end": 26
+          }
+        ],
+        "removed_entities": [
+          {
+            "entity": "慢性萎缩性胃炎",
+            "type": "西医诊断",
+            "start": 15,
+            "end": 22
+          }
+        ]
+      },
+      {
+        "removed_id": "train-002759",
+        "kept_id": "train-002031",
+        "text": "恶心呕吐、食欲下降、上腹不适、嗳气、烧心、反酸等临床症状症状积分明显降低（Ｐ＜０",
+        "reason": "same_split_annotation_conflict_keep_first",
+        "kept_entities": [
+          {
+            "entity": "恶心呕吐",
+            "type": "临床表现",
+            "start": 0,
+            "end": 4
+          }
+        ],
+        "removed_entities": [
+          {
+            "entity": "反酸",
+            "type": "临床表现",
+            "start": 21,
+            "end": 23
+          }
+        ]
+      },
+      {
+        "removed_id": "train-002791",
+        "kept_id": "train-000823",
+        "text": "目的：观察加味枳术汤治疗功能性消化不良（ＦＤ）的临床效果",
+        "reason": "same_split_exact_duplicate"
+      },
+      {
+        "removed_id": "train-002793",
+        "kept_id": "train-000989",
+        "text": "白芍１０ｇ",
+        "reason": "same_split_exact_duplicate"
+      },
+      {
+        "removed_id": "train-002862",
+        "kept_id": "train-002114",
+        "text": "目的：观察平肝饮子治疗功能性消化不良肝胃不和证的临床疗效",
+        "reason": "same_split_exact_duplicate"
+      },
+      {
+        "removed_id": "train-002962",
+        "kept_id": "train-001113",
+        "text": "四逆散合左金丸加味治疗肝胃郁热型非糜烂性胃食管反流病３２例",
+        "reason": "same_split_annotation_conflict_keep_first",
+        "kept_entities": [
+          {
+            "entity": "左金丸",
+            "type": "方剂",
+            "start": 4,
+            "end": 7
+          },
+          {
+            "entity": "非糜烂性胃食管反流病",
+            "type": "西医诊断",
+            "start": 16,
+            "end": 26
+          }
+        ],
+        "removed_entities": [
+          {
+            "entity": "四逆散",
+            "type": "方剂",
+            "start": 0,
+            "end": 3
+          },
+          {
+            "entity": "左金丸加味",
+            "type": "方剂",
+            "start": 4,
+            "end": 9
+          },
+          {
+            "entity": "肝胃郁热",
+            "type": "中医证候",
+            "start": 11,
+            "end": 15
+          }
+        ]
+      },
+      {
+        "removed_id": "train-003094",
+        "kept_id": "train-000530",
+        "text": "功能性消化不良；运脾消食汤；多潘立酮",
+        "reason": "same_split_exact_duplicate"
+      },
+      {
+        "removed_id": "train-003103",
+        "kept_id": "train-001113",
+        "text": "四逆散合左金丸加味治疗肝胃郁热型非糜烂性胃食管反流病３２例",
+        "reason": "same_split_annotation_conflict_keep_first",
+        "kept_entities": [
+          {
+            "entity": "左金丸",
+            "type": "方剂",
+            "start": 4,
+            "end": 7
+          },
+          {
+            "entity": "非糜烂性胃食管反流病",
+            "type": "西医诊断",
+            "start": 16,
+            "end": 26
+          }
+        ],
+        "removed_entities": [
+          {
+            "entity": "左金丸",
+            "type": "方剂",
+            "start": 4,
+            "end": 7
+          },
+          {
+            "entity": "肝胃郁热",
+            "type": "中医证候",
+            "start": 11,
+            "end": 15
+          }
+        ]
+      },
+      {
+        "removed_id": "train-003132",
+        "kept_id": "train-002878",
+        "text": "甘草６ｇ",
+        "reason": "same_split_exact_duplicate"
+      },
+      {
+        "removed_id": "train-003210",
+        "kept_id": "train-000283",
+        "text": "功能性消化不良；中西医结合疗法；消痞和胃汤；西沙必利",
+        "reason": "same_split_exact_duplicate"
+      },
+      {
+        "removed_id": "train-003256",
+        "kept_id": "train-002571",
+        "text": "茯苓３０ｇ",
+        "reason": "same_split_exact_duplicate"
+      },
+      {
+        "removed_id": "train-003269",
+        "kept_id": "train-001994",
+        "text": "中西医结合疗法对脾虚食滞型功能性消化不良患者临床症状及疗效的影响",
+        "reason": "same_split_exact_duplicate"
+      },
+      {
+        "removed_id": "train-003507",
+        "kept_id": "train-001994",
+        "text": "中西医结合疗法对脾虚食滞型功能性消化不良患者临床症状及疗效的影响",
+        "reason": "same_split_annotation_conflict_keep_first",
+        "kept_entities": [
+          {
+            "entity": "脾虚食滞",
+            "type": "中医证候",
+            "start": 8,
+            "end": 12
+          }
+        ],
+        "removed_entities": [
+          {
+            "entity": "功能性消化不良",
+            "type": "西医诊断",
+            "start": 13,
+            "end": 20
+          }
+        ]
+      },
+      {
+        "removed_id": "train-003549",
+        "kept_id": "train-001042",
+        "text": "结论：中西医结合治疗功能性消化不良有较好的临床疗效",
+        "reason": "same_split_exact_duplicate"
+      },
+      {
+        "removed_id": "train-003577",
+        "kept_id": "train-003392",
+        "text": "功能性消化不良；寒热错杂证；生活质量",
+        "reason": "same_split_exact_duplicate"
+      },
+      {
+        "removed_id": "train-003589",
+        "kept_id": "train-003043",
+        "text": "目的：观察中西医结合治疗功能性消化不良的临床疗效",
+        "reason": "same_split_exact_duplicate"
+      },
+      {
+        "removed_id": "train-003610",
+        "kept_id": "train-000018",
+        "text": "目的：探讨加味三香汤治疗肝郁脾虚型功能性消化不良患者的临床疗效及对患者抑郁焦虑状态的影响",
+        "reason": "same_split_exact_duplicate"
+      },
+      {
+        "removed_id": "train-003648",
+        "kept_id": "train-001715",
+        "text": "车前子３０ｇ",
+        "reason": "same_split_exact_duplicate"
+      },
+      {
+        "removed_id": "train-003939",
+        "kept_id": "train-000836",
+        "text": "目的：观察自拟益胃和营汤联合莫沙必利治疗功能性消化不良的临床疗效",
+        "reason": "same_split_annotation_conflict_keep_first",
+        "kept_entities": [
+          {
+            "entity": "功能性消化不良",
+            "type": "西医诊断",
+            "start": 20,
+            "end": 27
+          }
+        ],
+        "removed_entities": [
+          {
+            "entity": "莫沙必利",
+            "type": "西医治疗",
+            "start": 14,
+            "end": 18
+          },
+          {
+            "entity": "功能性消化不良",
+            "type": "西医诊断",
+            "start": 20,
+            "end": 27
+          }
+        ]
+      },
+      {
+        "removed_id": "train-003959",
+        "kept_id": "train-002805",
+        "text": "目的：观察中西医结合治疗功能性消化不良的疗效",
+        "reason": "same_split_exact_duplicate"
+      },
+      {
+        "removed_id": "train-004017",
+        "kept_id": "train-002031",
+        "text": "恶心呕吐、食欲下降、上腹不适、嗳气、烧心、反酸等临床症状症状积分明显降低（Ｐ＜０",
+        "reason": "same_split_annotation_conflict_keep_first",
+        "kept_entities": [
+          {
+            "entity": "恶心呕吐",
+            "type": "临床表现",
+            "start": 0,
+            "end": 4
+          }
+        ],
+        "removed_entities": [
+          {
+            "entity": "反酸",
+            "type": "临床表现",
+            "start": 21,
+            "end": 23
+          }
+        ]
+      },
+      {
+        "removed_id": "train-004136",
+        "kept_id": "train-003013",
+        "text": "功能性消化不良；柴胡疏肝散",
+        "reason": "same_split_exact_duplicate"
+      },
+      {
+        "removed_id": "train-004176",
+        "kept_id": "train-002059",
+        "text": "非糜烂性胃食管反流病，四逆散，左金丸，肝胃郁热",
+        "reason": "same_split_annotation_conflict_keep_first",
+        "kept_entities": [
+          {
+            "entity": "非糜烂性胃食管反流病",
+            "type": "西医诊断",
+            "start": 0,
+            "end": 10
+          },
+          {
+            "entity": "左金丸",
+            "type": "方剂",
+            "start": 15,
+            "end": 18
+          }
+        ],
+        "removed_entities": [
+          {
+            "entity": "左金丸",
+            "type": "方剂",
+            "start": 15,
+            "end": 18
+          },
+          {
+            "entity": "肝胃郁热",
+            "type": "中医证候",
+            "start": 19,
+            "end": 23
+          }
+        ]
+      },
+      {
+        "removed_id": "train-004201",
+        "kept_id": "train-002887",
+        "text": "方法：采用多中心、随机、双盲、安慰剂对照的方法将１０１例功能性消化不良寒热错杂证患者分为试验组和对照组，分别给予中药胃病４号和安慰剂治疗，疗程４周，随访１个月",
+        "reason": "same_split_exact_duplicate"
+      },
+      {
+        "removed_id": "train-004235",
+        "kept_id": "train-002031",
+        "text": "恶心呕吐、食欲下降、上腹不适、嗳气、烧心、反酸等临床症状症状积分明显降低（Ｐ＜０",
+        "reason": "same_split_exact_duplicate"
+      },
+      {
+        "removed_id": "train-004322",
+        "kept_id": "train-002738",
+        "text": "功能性消化不良；中西医结合",
+        "reason": "same_split_exact_duplicate"
+      },
+      {
+        "removed_id": "train-004351",
+        "kept_id": "train-002571",
+        "text": "茯苓３０ｇ",
+        "reason": "same_split_exact_duplicate"
+      },
+      {
+        "removed_id": "train-004373",
+        "kept_id": "train-000924",
+        "text": "肝炎后肝硬化失代偿期，一般状态较差，身体羸瘦不支，面色黧黑，巩膜黄染，口唇干燥，高度腹水，腹部膨隆，Ｂ超显示肝脏已明显缩小，脾肿大位于肋下３横指，脘腹胀满不能饮食，腹胀难于行动，大便不爽，３日１行，小便量少，颜色黄赤，舌质红，舌苔白厚而干，脉沉弦滑",
+        "reason": "same_split_annotation_conflict_keep_first",
+        "kept_entities": [
+          {
+            "entity": "体羸瘦",
+            "type": "临床表现",
+            "start": 19,
+            "end": 22
+          },
+          {
+            "entity": "面色黧黑",
+            "type": "临床表现",
+            "start": 25,
+            "end": 29
+          },
+          {
+            "entity": "巩膜黄染",
+            "type": "临床表现",
+            "start": 30,
+            "end": 34
+          },
+          {
+            "entity": "口唇干燥",
+            "type": "临床表现",
+            "start": 35,
+            "end": 39
+          },
+          {
+            "entity": "高度腹水",
+            "type": "临床表现",
+            "start": 40,
+            "end": 44
+          },
+          {
+            "entity": "腹部膨隆",
+            "type": "临床表现",
+            "start": 45,
+            "end": 49
+          },
+          {
+            "entity": "腹胀满",
+            "type": "临床表现",
+            "start": 74,
+            "end": 77
+          },
+          {
+            "entity": "不能饮食",
+            "type": "临床表现",
+            "start": 77,
+            "end": 81
+          },
+          {
+            "entity": "大便不爽",
+            "type": "临床表现",
+            "start": 89,
+            "end": 93
+          },
+          {
+            "entity": "小便量少",
+            "type": "临床表现",
+            "start": 99,
+            "end": 103
+          },
+          {
+            "entity": "舌苔白厚",
+            "type": "临床表现",
+            "start": 113,
+            "end": 117
+          },
+          {
+            "entity": "脉沉弦滑",
+            "type": "临床表现",
+            "start": 120,
+            "end": 124
+          }
+        ],
+        "removed_entities": [
+          {
+            "entity": "体羸瘦",
+            "type": "临床表现",
+            "start": 19,
+            "end": 22
+          },
+          {
+            "entity": "面色黧黑",
+            "type": "临床表现",
+            "start": 25,
+            "end": 29
+          },
+          {
+            "entity": "巩膜黄染",
+            "type": "临床表现",
+            "start": 30,
+            "end": 34
+          },
+          {
+            "entity": "口唇干燥",
+            "type": "临床表现",
+            "start": 35,
+            "end": 39
+          },
+          {
+            "entity": "腹水",
+            "type": "临床表现",
+            "start": 42,
+            "end": 44
+          },
+          {
+            "entity": "腹部膨隆",
+            "type": "临床表现",
+            "start": 45,
+            "end": 49
+          },
+          {
+            "entity": "腹胀满",
+            "type": "临床表现",
+            "start": 74,
+            "end": 77
+          },
+          {
+            "entity": "不能饮食",
+            "type": "临床表现",
+            "start": 77,
+            "end": 81
+          },
+          {
+            "entity": "大便",
+            "type": "临床表现",
+            "start": 89,
+            "end": 91
+          },
+          {
+            "entity": "小便量少",
+            "type": "临床表现",
+            "start": 99,
+            "end": 103
+          },
+          {
+            "entity": "舌苔白厚",
+            "type": "临床表现",
+            "start": 113,
+            "end": 117
+          },
+          {
+            "entity": "脉沉弦滑",
+            "type": "临床表现",
+            "start": 120,
+            "end": 124
+          }
+        ]
+      },
+      {
+        "removed_id": "train-004537",
+        "kept_id": "train-000060",
+        "text": "目的：观察中西医结合治疗腹泻型肠易激综合征的临床疗效",
+        "reason": "same_split_exact_duplicate"
+      },
+      {
+        "removed_id": "train-004610",
+        "kept_id": "train-003005",
+        "text": "目的：观察中西医结合治疗功能性消化不良临床疗效",
+        "reason": "same_split_exact_duplicate"
+      },
+      {
+        "removed_id": "train-004619",
+        "kept_id": "train-003970",
+        "text": "功能性消化不良；益胃和营汤；莫沙必利",
+        "reason": "same_split_annotation_conflict_keep_first",
+        "kept_entities": [
+          {
+            "entity": "功能性消化不良",
+            "type": "西医诊断",
+            "start": 0,
+            "end": 7
+          }
+        ],
+        "removed_entities": [
+          {
+            "entity": "功能性消化不良",
+            "type": "西医诊断",
+            "start": 0,
+            "end": 7
+          },
+          {
+            "entity": "莫沙必利",
+            "type": "西医治疗",
+            "start": 14,
+            "end": 18
+          }
+        ]
+      },
+      {
+        "removed_id": "train-004647",
+        "kept_id": "train-002245",
+        "text": "桂枝４ｇ",
+        "reason": "same_split_exact_duplicate"
+      },
+      {
+        "removed_id": "train-004662",
+        "kept_id": "train-000530",
+        "text": "功能性消化不良；运脾消食汤；多潘立酮",
+        "reason": "same_split_annotation_conflict_keep_first",
+        "kept_entities": [
+          {
+            "entity": "功能性消化不良",
+            "type": "西医诊断",
+            "start": 0,
+            "end": 7
+          }
+        ],
+        "removed_entities": [
+          {
+            "entity": "运脾消食汤",
+            "type": "方剂",
+            "start": 8,
+            "end": 13
+          }
+        ]
+      },
+      {
+        "removed_id": "train-004721",
+        "kept_id": "train-000227",
+        "text": "西医诊断：慢性肾小球肾炎",
+        "reason": "same_split_exact_duplicate"
+      },
+      {
+        "removed_id": "train-004787",
+        "kept_id": "train-001761",
+        "text": "自拟益胃和营汤联合莫沙必利治疗功能性消化不良６８例",
+        "reason": "same_split_annotation_conflict_keep_first",
+        "kept_entities": [
+          {
+            "entity": "功能性消化不良",
+            "type": "西医诊断",
+            "start": 15,
+            "end": 22
+          }
+        ],
+        "removed_entities": [
+          {
+            "entity": "莫沙必利",
+            "type": "西医治疗",
+            "start": 9,
+            "end": 13
+          },
+          {
+            "entity": "功能性消化不良",
+            "type": "西医诊断",
+            "start": 15,
+            "end": 22
+          }
+        ]
+      },
+      {
+        "removed_id": "train-004920",
+        "kept_id": "train-000947",
+        "text": "目的：观察运脾消食汤合多潘立酮治疗脾虚食滞型功能性消化不良（ＦＤ）的临床疗效",
+        "reason": "same_split_annotation_conflict_keep_first",
+        "kept_entities": [
+          {
+            "entity": "功能性消化不良",
+            "type": "西医诊断",
+            "start": 22,
+            "end": 29
+          }
+        ],
+        "removed_entities": [
+          {
+            "entity": "脾虚食滞",
+            "type": "中医证候",
+            "start": 17,
+            "end": 21
+          }
+        ]
+      },
+      {
+        "removed_id": "train-004969",
+        "kept_id": "train-000450",
+        "text": "复方蜥蜴散不同微粒组合剂；慢性萎缩性胃炎；临床研究",
+        "reason": "same_split_annotation_conflict_keep_first",
+        "kept_entities": [
+          {
+            "entity": "复方蜥蜴散",
+            "type": "方剂",
+            "start": 0,
+            "end": 5
+          }
+        ],
+        "removed_entities": [
+          {
+            "entity": "复方蜥蜴散不同微粒组合剂",
+            "type": "方剂",
+            "start": 0,
+            "end": 12
+          },
+          {
+            "entity": "慢性萎缩性胃炎",
+            "type": "西医诊断",
+            "start": 13,
+            "end": 20
+          }
+        ]
+      },
+      {
+        "removed_id": "train-004996",
+        "kept_id": "train-004289",
+        "text": "干姜６ｇ",
+        "reason": "same_split_exact_duplicate"
+      },
+      {
+        "removed_id": "train-005030",
+        "kept_id": "train-001268",
+        "text": "胁痛消失",
+        "reason": "same_split_exact_duplicate"
+      },
+      {
+        "removed_id": "train-005107",
+        "kept_id": "train-000155",
+        "text": "结论：运脾消食汤合多潘立酮治疗脾虚食滞型功能性消化不良临床疗效显著，且可明显改善临床症状",
+        "reason": "same_split_annotation_conflict_keep_first",
+        "kept_entities": [
+          {
+            "entity": "脾虚食滞",
+            "type": "中医证候",
+            "start": 15,
+            "end": 19
+          },
+          {
+            "entity": "功能性消化不良",
+            "type": "西医诊断",
+            "start": 20,
+            "end": 27
+          }
+        ],
+        "removed_entities": [
+          {
+            "entity": "脾虚食滞",
+            "type": "中医证候",
+            "start": 15,
+            "end": 19
+          }
+        ]
+      },
+      {
+        "removed_id": "train-005124",
+        "kept_id": "train-001994",
+        "text": "中西医结合疗法对脾虚食滞型功能性消化不良患者临床症状及疗效的影响",
+        "reason": "same_split_exact_duplicate"
+      },
+      {
+        "removed_id": "train-005138",
+        "kept_id": "train-002067",
+        "text": "方法：将我院门诊消化内科就诊的１３２例功能性消化不良患者，按随机数字表法分为两组，治疗组７２例口服加味枳术汤，对照组６０例口服吗叮啉，观察上腹胀、上腹痛、早饱、嗳气四大主症，并记录临床治疗前后的变化",
+        "reason": "same_split_exact_duplicate"
+      },
+      {
+        "removed_id": "train-000073",
+        "protected_split": "validation",
+        "text": "枳实１０ｇ",
+        "reason": "cross_split_exact_text_overlap"
+      },
+      {
+        "removed_id": "train-000155",
+        "protected_split": "validation",
+        "text": "结论：运脾消食汤合多潘立酮治疗脾虚食滞型功能性消化不良临床疗效显著，且可明显改善临床症状",
+        "reason": "cross_split_exact_text_overlap"
+      },
+      {
+        "removed_id": "train-000232",
+        "protected_split": "validation",
+        "text": "结论：平肝饮子对功能性消化不良肝胃不和型疗效较好，可有效改善临床症状",
+        "reason": "cross_split_exact_text_overlap"
+      },
+      {
+        "removed_id": "train-000338",
+        "protected_split": "validation",
+        "text": "肝气犯脾，脾失健运，清气不升，浊气不降，正气日衰，水湿不化，积聚腹腔而成臌胀",
+        "reason": "cross_split_exact_text_overlap"
+      },
+      {
+        "removed_id": "train-000861",
+        "protected_split": "test",
+        "text": "方法：将内镜和病理确诊为慢性萎缩性胃炎伴胃黏膜异型增生且符合中医血瘀热毒证型的８２例患者，随机分为治疗组和对照组",
+        "reason": "cross_split_exact_text_overlap"
+      },
+      {
+        "removed_id": "train-000897",
+        "protected_split": "test",
+        "text": "加味三香汤；肝郁脾虚型；功能性消化不良；抑郁；焦虑",
+        "reason": "cross_split_exact_text_overlap"
+      },
+      {
+        "removed_id": "train-000947",
+        "protected_split": "test",
+        "text": "目的：观察运脾消食汤合多潘立酮治疗脾虚食滞型功能性消化不良（ＦＤ）的临床疗效",
+        "reason": "cross_split_exact_text_overlap"
+      },
+      {
+        "removed_id": "train-001088",
+        "protected_split": "validation",
+        "text": "片姜黄１０ｇ",
+        "reason": "cross_split_exact_text_overlap"
+      },
+      {
+        "removed_id": "train-001399",
+        "protected_split": "test",
+        "text": "舌质红紫而有瘀点瘀斑，舌苔白厚腻，脉沉伏",
+        "reason": "cross_split_exact_text_overlap"
+      },
+      {
+        "removed_id": "train-001491",
+        "protected_split": "validation",
+        "text": "结论：胃病４号复方能够改善功能性消化不良患者近期的生活质量，疗效优于安慰剂",
+        "reason": "cross_split_exact_text_overlap"
+      },
+      {
+        "removed_id": "train-001994",
+        "protected_split": "validation",
+        "text": "中西医结合疗法对脾虚食滞型功能性消化不良患者临床症状及疗效的影响",
+        "reason": "cross_split_exact_text_overlap"
+      },
+      {
+        "removed_id": "train-002154",
+        "protected_split": "test",
+        "text": "症属脾胃虚、湿热发黄",
+        "reason": "cross_split_exact_text_overlap"
+      },
+      {
+        "removed_id": "train-003043",
+        "protected_split": "test",
+        "text": "目的：观察中西医结合治疗功能性消化不良的临床疗效",
+        "reason": "cross_split_exact_text_overlap"
+      },
+      {
+        "removed_id": "train-003098",
+        "protected_split": "test",
+        "text": "方法：将符合标准的功能性消化不良肝胃不和证患者８０例，随机分为治疗组４５例和对照组３５例",
+        "reason": "cross_split_exact_text_overlap"
+      },
+      {
+        "removed_id": "train-003725",
+        "protected_split": "validation",
+        "text": "结论：中西医结合治疗功能性消化不良疗效较好",
+        "reason": "cross_split_exact_text_overlap"
+      },
+      {
+        "removed_id": "train-004016",
+        "protected_split": "test",
+        "text": "方法：选取南京医科大学附属淮安第一医院中医科及消化内科２０１２年１月～２０１５年１月收治的９８例功能性消化不良合并焦虑抑郁患者作为观察对象",
+        "reason": "cross_split_exact_text_overlap"
+      },
+      {
+        "removed_id": "train-004816",
+        "protected_split": "test",
+        "text": "目的：观察胃病４号复方对功能性消化不良寒热错杂证患者近期生活质量的影响",
+        "reason": "cross_split_exact_text_overlap"
+      }
+    ],
+    "validation": [
+      {
+        "removed_id": "validation-000305",
+        "kept_id": "validation-000039",
+        "text": "目的：观察中西医结合治疗功能性消化不良的临床疗效",
+        "reason": "same_split_exact_duplicate"
+      },
+      {
+        "removed_id": "validation-000431",
+        "kept_id": "validation-000213",
+        "text": "中西医结合疗法对脾虚食滞型功能性消化不良患者临床症状及疗效的影响",
+        "reason": "same_split_annotation_conflict_keep_first",
+        "kept_entities": [
+          {
+            "entity": "脾虚食滞",
+            "type": "中医证候",
+            "start": 8,
+            "end": 12
+          },
+          {
+            "entity": "功能性消化不良",
+            "type": "西医诊断",
+            "start": 13,
+            "end": 20
+          }
+        ],
+        "removed_entities": [
+          {
+            "entity": "功能性消化不良",
+            "type": "西医诊断",
+            "start": 13,
+            "end": 20
+          }
+        ]
+      },
+      {
+        "removed_id": "validation-000039",
+        "protected_split": "test",
+        "text": "目的：观察中西医结合治疗功能性消化不良的临床疗效",
+        "reason": "cross_split_exact_text_overlap"
+      }
+    ],
+    "test": []
+  }
+}
