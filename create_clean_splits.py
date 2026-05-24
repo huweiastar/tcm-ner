@@ -8,7 +8,7 @@ import argparse
 # 导入 JSON 模块，用来保存去重动作明细。
 import json
 # 导入 defaultdict，按原始文本聚合同一划分中的记录。
-from collections import defaultdict
+from collections import Counter, defaultdict
 # 导入 Path，以跨系统方式操作文件路径。
 from pathlib import Path
 # 导入 Any，标注记录字典包含多种类型字段。
@@ -184,6 +184,30 @@ def main() -> None:
         clean_records[split] = unique_records
         # 记录内部去重删除动作。
         removed_by_split[split].extend(removed_records)
+    # 阶段一：划分内去重完成，统计并打印。
+    print("=== 阶段一：划分内去重 ===")
+    for split, records in loaded_records.items():
+        duplicates = sum(
+            1 for r in removed_by_split[split]
+            if r["reason"] == "same_split_exact_duplicate"
+        )
+        conflicts = sum(
+            1 for r in removed_by_split[split]
+            if r["reason"] == "same_split_annotation_conflict_keep_first"
+        )
+        if duplicates or conflicts:
+            print(f"  {split:<10} 完全重复={duplicates:>3}  标注冲突={conflicts:>3}")
+    total_dup = sum(
+        1 for s in removed_by_split for r in removed_by_split[s]
+        if r["reason"] == "same_split_exact_duplicate"
+    )
+    total_conflict = sum(
+        1 for s in removed_by_split for r in removed_by_split[s]
+        if r["reason"] == "same_split_annotation_conflict_keep_first"
+    )
+    print(f"  合计：完全重复={total_dup}  标注冲突={total_conflict}")
+    print()
+
     # 维护已经被较高优先级划分占用的文本。
     protected_texts: dict[str, str] = {}
     # 按 test、validation、train 顺序处理，优先保留最终评价数据完整性。
@@ -196,6 +220,25 @@ def main() -> None:
         clean_records[split] = kept_records
         # 保存跨划分去重删除动作。
         removed_by_split[split].extend(removed_records)
+
+    # 阶段二：跨划分去重完成，统计并打印。
+    print("=== 阶段二：跨划分去重 ===")
+    total_cross = 0
+    for split in ["test", "validation", "train"]:
+        cross = sum(
+            1 for r in removed_by_split[split]
+            if r["reason"] == "cross_split_exact_text_overlap"
+        )
+        if cross:
+            protected_in = Counter(
+                r["protected_split"] for r in removed_by_split[split]
+                if r["reason"] == "cross_split_exact_text_overlap"
+            )
+            detail = ", ".join(f"{k}={v}" for k, v in sorted(protected_in.items()))
+            print(f"  {split:<10} 跨划分重叠={cross}（存在于: {detail}）")
+        total_cross += cross
+    print(f"  合计：跨划分重叠={total_cross}")
+    print()
     # 确保干净数据输出目录存在。
     args.output_dir.mkdir(parents=True, exist_ok=True)
     # 按训练代码预期文件名写出三份干净 JSONL。
