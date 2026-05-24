@@ -1,0 +1,38 @@
+# 该配置仅用于可选工业基线，不替代作业要求的 Qwen2.5-7B LoRA/QLoRA 主实验。
+experiment_name: chinese_macbert_token_ner_baseline
+# 一个体积较小、适合中文 token classification 的编码器模型。
+model_name_or_path: hfl/chinese-macbert-base
+
+# 使用与优化版大模型完全相同的数据副本，保证比较公平。
+data:
+  # 重采样后的干净训练集。
+  train_file: processed_data/optimized/train_balanced.jsonl
+  # 未重采样的干净验证集。
+  validation_file: processed_data/clean/validation.jsonl
+  # 未重采样的干净测试集。
+  test_file: processed_data/clean/test.jsonl
+
+# 判别式模型训练参数。
+training:
+  # 基线权重与评价输出目录。
+  output_dir: outputs/token_baseline
+  # 文本最长约百余字符，256 token 已足够。
+  max_length: 256
+  # 基线训练轮数。
+  num_train_epochs: 5
+  # Encoder 微调常用较小学习率。
+  learning_rate: 0.00003
+  # 单卡训练批大小，可按显存调整。
+  per_device_train_batch_size: 16
+  # 单卡验证批大小。
+  per_device_eval_batch_size: 32
+  # 日志打印频率。
+  logging_steps: 20
+  # 每轮验证并保存，容易理解。
+  save_total_limit: 2
+  # 轻量权重衰减。
+  weight_decay: 0.01
+  # 固定随机种子。
+  seed: 42
+  # 支持 BF16 显卡时使用 BF16，否则脚本自动回退。
+  precision: bf16

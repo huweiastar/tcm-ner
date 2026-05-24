@@ -1,0 +1,96 @@
+# 这是按优化流程生成数据后使用的普通 LoRA 配置；基座以 BF16/FP16 加载。
+experiment_name: qwen2_5_7b_tcm_ner_lora_optimized
+# 修改本行即可使用其他兼容聊天模板的模型。
+model_name_or_path: Qwen/Qwen2.5-7B-Instruct
+# 采用不进行 4-bit 量化的 LoRA 方法。
+method: lora
+# Qwen 官方模型不需要额外执行远程自定义代码。
+trust_remote_code: false
+
+# 优化训练数据与干净评测数据路径。
+data:
+  # 只在训练集上增强了极低频类别。
+  train_file: processed_data/optimized/train_balanced.jsonl
+  # 验证集为去除跨集合精确重叠后的副本。
+  validation_file: processed_data/clean/validation.jsonl
+  # 测试集保持完整，不被重采样。
+  test_file: processed_data/clean/test.jsonl
+
+# 普通 LoRA 默认只适配注意力投影层以减少显存。
+lora:
+  # 低秩维度。
+  r: 16
+  # LoRA 更新缩放系数。
+  alpha: 32
+  # 防止 adapter 过拟合的小概率丢弃。
+  dropout: 0.05
+  # Qwen2.5 注意力层中的四个目标投影模块。
+  target_modules:
+    - q_proj
+    - k_proj
+    - v_proj
+    - o_proj
+
+# 普通 LoRA 训练参数。
+training:
+  # 与所有其他实验隔离输出。
+  output_dir: outputs/qwen2_5_7b_lora_optimized
+  # 输入与答案最大长度。
+  max_length: 512
+  # 最多训练轮数。
+  num_train_epochs: 3
+  # Adapter 学习率。
+  learning_rate: 0.0002
+  # 普通 LoRA 显存需求较高，默认单卡批量较小。
+  per_device_train_batch_size: 2
+  # 验证批量。
+  per_device_eval_batch_size: 2
+  # 累积梯度得到等效批量 16。
+  gradient_accumulation_steps: 8
+  # 损失日志步频。
+  logging_steps: 10
+  # 验证频率。
+  eval_steps: 100
+  # 保存频率。
+  save_steps: 100
+  # 多保存一些 checkpoint 供 F1 选择。
+  save_total_limit: 4
+  # 学习率热身比例。
+  warmup_ratio: 0.03
+  # 学习率下降策略。
+  lr_scheduler_type: linear
+  # 权重衰减强度。
+  weight_decay: 0.01
+  # 显存优化开关。
+  gradient_checkpointing: true
+  # 使用内置高效注意力实现。
+  attn_implementation: sdpa
+  # 减少批次 padding。
+  group_by_length: true
+  # 启用验证 loss 早停。
+  early_stopping_patience: 3
+  # 早停最小改善阈值。
+  early_stopping_threshold: 0.0
+  # GPU 支持时使用 BF16。
+  precision: bf16
+  # 普通 LoRA 采用标准 PyTorch 优化器。
+  optim: adamw_torch
+  # 不发送第三方日志。
+  report_to: none
+  # 实验随机种子。
+  seed: 42
+  # 教学默认不拼包。
+  packing: false
+  # 可填写检查点路径继续训练。
+  resume_from_checkpoint: null
+
+# 生成评价配置。
+generation:
+  # 普通 LoRA 更占显存，默认每批生成两条。
+  batch_size: 2
+  # 格式错误时自动纠正一次。
+  retry_invalid_output: true
+  # 输出最大长度。
+  max_new_tokens: 256
+  # F1 区间重采样次数。
+  bootstrap_resamples: 1000

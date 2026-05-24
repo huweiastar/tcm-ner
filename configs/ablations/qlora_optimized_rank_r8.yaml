@@ -1,0 +1,44 @@
+experiment_name: qwen2_5_7b_tcm_ner_qlora_optimized_rank_r8
+model_name_or_path: Qwen/Qwen2.5-7B-Instruct
+method: qlora
+trust_remote_code: false
+data:
+  train_file: processed_data/optimized/train_balanced.jsonl
+  validation_file: processed_data/clean/validation.jsonl
+  test_file: processed_data/clean/test.jsonl
+lora:
+  r: 8
+  alpha: 16
+  dropout: 0.05
+  target_modules: all-linear
+training:
+  output_dir: outputs/ablations/rank_r8
+  max_length: 512
+  num_train_epochs: 3
+  learning_rate: 0.0002
+  per_device_train_batch_size: 4
+  per_device_eval_batch_size: 4
+  gradient_accumulation_steps: 4
+  logging_steps: 10
+  eval_steps: 100
+  save_steps: 100
+  save_total_limit: 4
+  warmup_ratio: 0.03
+  lr_scheduler_type: linear
+  weight_decay: 0.01
+  gradient_checkpointing: true
+  attn_implementation: sdpa
+  group_by_length: true
+  early_stopping_patience: 3
+  early_stopping_threshold: 0.0
+  precision: bf16
+  optim: paged_adamw_8bit
+  report_to: none
+  seed: 42
+  packing: false
+  resume_from_checkpoint: null
+generation:
+  batch_size: 4
+  retry_invalid_output: true
+  max_new_tokens: 256
+  bootstrap_resamples: 1000

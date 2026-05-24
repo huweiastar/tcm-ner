@@ -1,0 +1,92 @@
+# 这是按优化流程生成数据后使用的 QLoRA 配置；保留 configs/qlora.yaml 用作原始基线。
+experiment_name: qwen2_5_7b_tcm_ner_qlora_optimized
+# 修改本行即可在同一流程替换兼容聊天模板的指令模型。
+model_name_or_path: Qwen/Qwen2.5-7B-Instruct
+# 采用 4-bit 基座权重加 LoRA adapter 的低显存训练方式。
+method: qlora
+# Qwen 官方模型不需要额外执行远程自定义代码。
+trust_remote_code: false
+
+# 本配置使用去除精确文本泄漏后、仅对低频训练类别增强的数据。
+data:
+  # 该文件由 rebalance_train_data.py 生成，仅训练集会被增强。
+  train_file: processed_data/optimized/train_balanced.jsonl
+  # 该文件由 create_clean_splits.py 生成，不参与重采样。
+  validation_file: processed_data/clean/validation.jsonl
+  # 测试集完整保留，只移除较低优先级集合中的重复文本。
+  test_file: processed_data/clean/test.jsonl
+
+# QLoRA 可在所有线性层插入 adapter，以换取较强适配能力。
+lora:
+  # 低秩维度；之后可生成 r=8 和 r=32 配置做消融。
+  r: 16
+  # 更新缩放系数，常设置为 rank 的两倍。
+  alpha: 32
+  # 少量 dropout 缓解小规模训练集过拟合。
+  dropout: 0.05
+  # PEFT 的 all-linear 会适配模型全部线性层。
+  target_modules: all-linear
+
+# 训练设置已打开初学者可以直接使用的稳妥优化。
+training:
+  # 本实验输出目录与基线隔离，便于比较。
+  output_dir: outputs/qwen2_5_7b_qlora_optimized
+  # 数据文本较短，512 token 足以包含提示词和实体答案。
+  max_length: 512
+  # 最多训练三轮；早停可能提前结束。
+  num_train_epochs: 3
+  # LoRA adapter 常用学习率。
+  learning_rate: 0.0002
+  # QLoRA 起始批大小；显存不足改为 2 或 1。
+  per_device_train_batch_size: 4
+  # 验证阶段的单设备批大小。
+  per_device_eval_batch_size: 4
+  # 与单卡批大小配合获得等效批量 16。
+  gradient_accumulation_steps: 4
+  # 每十个更新步记录损失。
+  logging_steps: 10
+  # 每一百步在验证集计算 loss。
+  eval_steps: 100
+  # 每一百步保存 adapter checkpoint。
+  save_steps: 100
+  # 保留多个 checkpoint，之后可在 validation 上按实体 F1 选择。
+  save_total_limit: 4
+  # 训练初期逐步升高学习率。
+  warmup_ratio: 0.03
+  # 使用容易解释的线性学习率计划。
+  lr_scheduler_type: linear
+  # 为 adapter 训练添加轻量正则。
+  weight_decay: 0.01
+  # 开启梯度检查点减少显存。
+  gradient_checkpointing: true
+  # PyTorch 原生 SDPA 无需安装额外包；可实验替换为 flash_attention_2。
+  attn_implementation: sdpa
+  # 将相似长度样本安排到同批次，降低 padding 开销。
+  group_by_length: true
+  # 连续三次验证 loss 没有改善就停止继续训练。
+  early_stopping_patience: 3
+  # 任何 loss 降低都视为改善。
+  early_stopping_threshold: 0.0
+  # 支持 BF16 的显卡优先用 BF16，否则代码自动回退到 FP16。
+  precision: bf16
+  # QLoRA 使用低显存分页优化器。
+  optim: paged_adamw_8bit
+  # 不默认发送训练数据到第三方日志服务。
+  report_to: none
+  # 固定随机种子便于复现。
+  seed: 42
+  # 保持每条短文本独立，避免教学阶段混淆样本边界。
+  packing: false
+  # null 表示新训练；填写 checkpoint 可中断续训。
+  resume_from_checkpoint: null
+
+# 推理与最终 F1 输出相关设置。
+generation:
+  # 按四条样本批量推理，提升评价吞吐。
+  batch_size: 4
+  # JSON 输出不合规时再生成一次纠正答案。
+  retry_invalid_output: true
+  # 允许的答案最大新 token 数。
+  max_new_tokens: 256
+  # 使用一千次重采样估计 micro F1 区间。
+  bootstrap_resamples: 1000

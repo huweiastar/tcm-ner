@@ -1,0 +1,92 @@
+# 实验名称会显示在日志里，便于区分不同设置。
+experiment_name: qwen2_5_7b_tcm_ner_qlora
+# 修改这一行即可替换为兼容聊天模板的其他基座/指令模型。
+model_name_or_path: Qwen/Qwen2.5-7B-Instruct
+# qlora 表示基座以 4-bit 量化加载，再训练 LoRA 参数。
+method: qlora
+# 官方 Qwen 仓库无需自定义远程代码，默认保持关闭更稳妥。
+trust_remote_code: false
+
+# 数据部分指定第一步预处理得到的文件路径。
+data:
+  # 训练集负责更新 LoRA 参数。
+  train_file: processed_data/train.jsonl
+  # 验证集负责观察 loss 并选择较好检查点。
+  validation_file: processed_data/validation.jsonl
+  # 测试集仅在训练结束后做最终 F1 报告。
+  test_file: processed_data/test.jsonl
+
+# QLoRA 显存更省，因此可在全部线性层上增加适配器以提升表达能力。
+lora:
+  # r 越大可训练容量越高，同时占用更多显存。
+  r: 16
+  # alpha 控制 LoRA 更新量缩放，常取 r 的两倍。
+  alpha: 32
+  # dropout 可以缓解小数据集过拟合。
+  dropout: 0.05
+  # all-linear 是 QLoRA 中常用的全线性层适配设置。
+  target_modules: all-linear
+
+# 训练参数可先使用默认值跑通，再基于验证集调优。
+training:
+  # 所有日志和 QLoRA adapter 检查点保存到这里。
+  output_dir: outputs/qwen2_5_7b_qlora
+  # 统一把样本最大 token 长度限制在 512；本数据原文最长仅约 151 字。
+  max_length: 512
+  # 初学实验先训练 3 轮。
+  num_train_epochs: 3
+  # QLoRA 常用适配器学习率。
+  learning_rate: 0.0002
+  # QLoRA 的单步显存较少，通常可放入更多样本。
+  per_device_train_batch_size: 4
+  # 验证批大小可按实际显存继续增加。
+  per_device_eval_batch_size: 4
+  # 累积 4 步梯度，等效训练批大小仍为每卡 16。
+  gradient_accumulation_steps: 4
+  # 每隔多少个更新步骤打印一次训练损失。
+  logging_steps: 10
+  # 每隔多少个更新步骤在验证集上评价一次。
+  eval_steps: 100
+  # 每隔多少个更新步骤保存一次适配器检查点。
+  save_steps: 100
+  # 只保留最近两个检查点，防止硬盘被占满。
+  save_total_limit: 2
+  # 用 warmup 让训练开始阶段的学习率平滑上升。
+  warmup_ratio: 0.03
+  # 常见线性学习率下降策略。
+  lr_scheduler_type: linear
+  # 少量权重衰减可抑制过拟合。
+  weight_decay: 0.01
+  # 开启梯度检查点以显著降低激活显存。
+  gradient_checkpointing: true
+  # sdpa 是 PyTorch 内置高效注意力；安装 flash-attn 后可试验 flash_attention_2。
+  attn_implementation: sdpa
+  # 按样本长度分组可减少同一批次中的 padding 浪费。
+  group_by_length: true
+  # 验证 loss 连续若干次不改善时停止，减少明显过拟合和无效计算。
+  early_stopping_patience: 3
+  # loss 至少改善该数值才被视为有进步。
+  early_stopping_threshold: 0.0
+  # 优先尝试 NVIDIA Ampere 及更新显卡支持的 BF16。
+  precision: bf16
+  # 分页 8-bit AdamW 可进一步节约 QLoRA 优化器显存。
+  optim: paged_adamw_8bit
+  # 本教学版不默认向外部实验跟踪平台发送日志。
+  report_to: none
+  # 设置随机种子，方便重复实验。
+  seed: 42
+  # false 表示保持样本独立，最容易理解和检查输出。
+  packing: false
+  # 为空表示从头开始；也可填写某个 checkpoint 路径断点续训。
+  resume_from_checkpoint: null
+
+# 推理与评价参数由 evaluate_ner.py 读取，也可以在命令行临时覆盖。
+generation:
+  # 批量生成通常比逐条生成快；显存不足时改为 1。
+  batch_size: 4
+  # 第一次回答不是合法 JSON 时，自动追加一次格式纠错提问。
+  retry_invalid_output: true
+  # 限制每条实体答案生成长度。
+  max_new_tokens: 256
+  # 对最终 micro F1 进行重复抽样，估计 95% 置信区间。
+  bootstrap_resamples: 1000
