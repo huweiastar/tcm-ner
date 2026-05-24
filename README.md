@@ -14,6 +14,126 @@
 实体 JSON”的指令式 SFT 任务。需要替换基座模型时，只修改 YAML 中的
 `model_name_or_path`，但不同模型架构应重新训练 adapter。
 
+## 快速开始
+
+如果你已经有 GPU 环境并且只想快速跑通流程，依次执行：
+
+```bash
+# 1. 数据转换
+python prepare_sft_data.py --data_dir data --output_dir processed_data
+
+# 2. 去泄漏干净副本
+python create_clean_splits.py \
+  --input_dir processed_data \
+  --output_dir processed_data/clean \
+  --report_file reports/clean_split_report.json \
+  --within_conflict_policy keep_first
+
+# 3. 低频类别增强
+python rebalance_train_data.py \
+  --input_file processed_data/clean/train.jsonl \
+  --output_file processed_data/optimized/train_balanced.jsonl \
+  --target_types 其他治疗 \
+  --target_entity_count 300 \
+  --max_extra_copies_per_record 4 \
+  --report_file reports/rebalance_report.json
+
+# 4. 训练 QLoRA 模型（需要 GPU）
+python train_sft.py --config configs/qlora_optimized.yaml
+
+# 5. 验证集评价
+python evaluate_ner.py \
+  --config configs/qlora_optimized.yaml \
+  --adapter_path outputs/qwen2_5_7b_qlora_optimized \
+  --data_file processed_data/clean/validation.jsonl \
+  --prediction_file outputs/qwen2_5_7b_qlora_optimized/validation_predictions.jsonl \
+  --metrics_file outputs/qwen2_5_7b_qlora_optimized/validation_metrics.json
+```
+
+## 任务说明
+
+### 十种实体类别
+
+| 类别 | 示例 | 说明 |
+| --- | --- | --- |
+| `中药` | 黄芪、当归 | 单味中药材 |
+| `方剂` | 六味地黄丸、桂枝汤 | 中药复方制剂 |
+| `临床表现` | 口苦、头晕、腹痛 | 症状与体征 |
+| `中医诊断` | 消渴、胸痹 | 中医病名诊断 |
+| `中医证候` | 肝肾阴虚、气滞血瘀 | 辨证分型 |
+| `中医治则` | 清热解毒、活血化瘀 | 治疗原则与治法 |
+| `中医治疗` | 针灸、推拿、拔罐 | 中医治疗手段 |
+| `西医诊断` | 糖尿病、高血压 | 现代医学疾病诊断 |
+| `西医治疗` | 手术、化疗、抗生素 | 现代医学治疗手段 |
+| `其他治疗` | 饮食调理、运动疗法 | 未归入上述类别的治疗方式 |
+
+### 为什么用生成式 SFT 而不是判别式 Token Classification
+
+传统的 NER 使用 BERT 等模型做逐字分类（Token Classification），但本项目采用
+**指令式 SFT** 方式，原因是：
+
+1. **直接输出结构化结果**：模型直接返回 JSON 数组，包含实体原文、类别和位置，
+   无需后处理解码；
+2. **零样本/少样本能力**：大模型对未见过的类别有更强的泛化能力；
+3. **更符合大模型使用范式**：将 NER 转化为"问答"任务，方便与下游对话系统集成；
+4. **保留判别式基线**：`train_token_baseline.py` 提供了传统方法的对比。
+
+## 数据流程图
+
+```
+原始 BIO 数据                    SFT 训练数据                    模型输出
+─────────────                   ──────────────                   ──────────
+data/medical.train ──┐
+data/medical.dev   ──┼──► prepare_sft_data.py ──► processed_data/
+data/medical.test  ──┘                            ├── train.jsonl
+                                                  ├── validation.jsonl
+审计 ──► audit_dataset.py ──► reports/             └── test.jsonl
+                     data_audit.md
+                     data_audit.json                       │
+                                                           ▼
+清理 ──► create_clean_splits.py ──► processed_data/clean/
+                          ├── train.jsonl
+                          ├── validation.jsonl    evaluate_ner.py ◄── adapter
+                          └── test.jsonl                  │
+                                                          ▼
+增强 ──► rebalance_train_data.py ──► processed_data/optimized/    validation_predictions.jsonl
+                           train_balanced.jsonl                   validation_metrics.json
+                                                                   │
+训练 ──► train_sft.py ◄── configs/qlora_optimized.yaml             ▼
+             │                                           analyze_predictions.py
+             ▼                                                           │
+   outputs/qwen2_5_7b_qlora_optimized/                                   ▼
+       ├── adapter_model/                                        reports/*_errors.md
+       └── training_args.bin                                     reports/*_errors.json
+```
+
+## 训练数据格式示例
+
+`processed_data/train.jsonl` 中每行是一条完整的对话式训练记录：
+
+```json
+{
+  "id": "train-000001",
+  "text": "患者现头昏口苦，舌红苔黄，属肝肾阴虚证。",
+  "gold_entities": [
+    {"entity": "头昏", "type": "临床表现", "start": 4, "end": 6},
+    {"entity": "口苦", "type": "临床表现", "start": 6, "end": 8},
+    {"entity": "舌红", "type": "临床表现", "start": 9, "end": 11},
+    {"entity": "苔黄", "type": "临床表现", "start": 11, "end": 13},
+    {"entity": "肝肾阴虚证", "type": "中医证候", "start": 15, "end": 20}
+  ],
+  "prompt": [
+    {"role": "system", "content": "你是一名中医药命名实体识别助手。..."},
+    {"role": "user", "content": "请识别下列文本中的中医药相关实体：\n患者现头昏口苦，舌红苔黄，属肝肾阴虚证。"}
+  ],
+  "completion": [
+    {"role": "assistant", "content": "[{\"entity\":\"头昏\",\"type\":\"临床表现\",\"start\":4,\"end\":6},{\"entity\":\"口苦\",\"type\":\"临床表现\",\"start\":6,\"end\":8},{\"entity\":\"舌红\",\"type\":\"临床表现\",\"start\":9,\"end\":11},{\"entity\":\"苔黄\",\"type\":\"临床表现\",\"start\":11,\"end\":13},{\"entity\":\"肝肾阴虚证\",\"type\":\"中医证候\",\"start\":15,\"end\":20}]"}
+  ]
+}
+```
+
+模型训练后看到的输入与训练时完全一致，输出为 JSON 数组格式的实体列表。
+
 ## 先看懂数据
 
 第一次接触 NER 时，请先阅读 [data/DATASET_GUIDE.md](data/DATASET_GUIDE.md)。
@@ -56,6 +176,66 @@
 
 核心共用逻辑在 `ner_utils.py`；逐格学习版本在
 `notebooks/中医药命名实体识别_Qwen2.5_LoRA_QLoRA.ipynb`。
+
+## 项目目录结构
+
+```
+├── configs/                     # 训练配置文件
+│   ├── ablations/               #   消融实验配置
+│   │   ├── qlora_optimized_rank_r8.yaml
+│   │   ├── qlora_optimized_rank_r32.yaml
+│   │   ├── qlora_optimized_lr_1e-4.yaml
+│   │   ├── qlora_optimized_lr_3e-4.yaml
+│   │   └── qlora_optimized_attention_only.yaml
+│   ├── qlora.yaml               #   基础 QLoRA 配置
+│   ├── qlora_optimized.yaml     #   优化 QLoRA 配置（推荐主实验）
+│   ├── lora.yaml                #   基础 LoRA 配置
+│   ├── lora_optimized.yaml      #   优化 LoRA 配置
+│   ├── token_baseline.yaml      #   token 分类基线配置
+│   └── accelerate_multi_gpu.yaml #  多 GPU 加速配置
+├── data/                        # 原始数据集
+│   ├── medical.train            #   训练集（BIO 格式）
+│   ├── medical.dev              #   开发集（BIO 格式）
+│   ├── medical.test             #   测试集（BIO 格式）
+│   └── DATASET_GUIDE.md         #   数据格式说明
+├── notebooks/                   # Jupyter Notebook 学习版本
+│   └── 中医药命名实体识别_Qwen2.5_LoRA_QLoRA.ipynb
+├── processed_data/              # 处理后的数据
+│   ├── train.jsonl              #   转换后的训练数据
+│   ├── validation.jsonl         #   转换后的验证数据
+│   ├── test.jsonl               #   转换后的测试数据
+│   ├── summary.json             #   数据转换摘要
+│   ├── clean/                   #   去泄漏干净副本
+│   │   ├── train.jsonl
+│   │   ├── validation.jsonl
+│   │   └── test.jsonl
+│   └── optimized/               #   增强后数据
+│       └── train_balanced.jsonl #     低频类别增强后的训练数据
+├── reports/                     # 审计和分析报告
+│   ├── data_audit.md            #   数据审计报告
+│   ├── data_audit.json
+│   ├── clean_split_report.json  #   干净拆分报告
+│   └── rebalance_report.json    #   数据重平衡报告
+├── tests/                       # 单元测试
+│   ├── test_ner_utils.py
+│   └── test_optimization_tools.py
+├── outputs/                     # 训练输出（模型、指标、预测）
+├── prepare_sft_data.py          # 步骤1：BIO → SFT JSONL 转换
+├── audit_dataset.py             # 步骤2：数据质量审计
+├── create_clean_splits.py       # 步骤3：生成无泄漏数据副本
+├── rebalance_train_data.py      # 步骤4：低频类别增强
+├── train_sft.py                 # 步骤5：LoRA/QLoRA 训练入口
+├── evaluate_ner.py              # 步骤6：模型评估（完整实体 F1）
+├── analyze_predictions.py       # 步骤7：误差分析
+├── make_ablation_configs.py     # 步骤8：生成消融实验配置
+├── compare_experiments.py       # 步骤8：实验结果对比排名
+├── train_token_baseline.py      # 步骤10：token 分类基线
+├── ner_utils.py                 # 核心共用工具函数
+├── requirements.txt             # Python 依赖
+├── .gitignore
+├── README.md
+└── INDUSTRIAL_OPTIMIZATION.md   # 优化实施状态与决策记录
+```
 
 ## 运行环境
 
@@ -522,6 +702,43 @@ python -m unittest discover -s tests -v
 
 当前环境未启动 7B 模型训练或推理生成，因为这需要适配的 GPU、CUDA/PyTorch
 环境和模型权重下载。
+
+## 常见问题
+
+### 训练相关
+
+| 问题 | 解决方法 |
+| --- | --- |
+| CUDA Out of Memory | 将 YAML 中 `per_device_train_batch_size` 改为 2 或 1，同时增大 `gradient_accumulation_steps` 保持等效批量 |
+| 模型下载失败 | 检查 HuggingFace 网络连通性，或设置 `HF_ENDPOINT=https://hf-mirror.com` 使用国内镜像 |
+| 训练 loss 不下降 | 检查数据格式是否正确，学习率是否过大（LoRA 通常在 1e-4 ~ 5e-4 范围） |
+| 验证 loss 比训练 loss 高很多 | 可能过拟合，尝试增大 `lora.dropout` 或减少 `num_train_epochs` |
+| 显存充足但训练很慢 | 确认 `attn_implementation: sdpa` 已开启，`group_by_length: true` 可减少 padding |
+
+### 数据相关
+
+| 问题 | 解决方法 |
+| --- | --- |
+| `prepare_sft_data.py` 报错 "不是合法 JSON" | 检查 JSONL 文件是否有损坏或不完整行 |
+| 审计报告显示大量标注冲突 | 打开 `reports/data_audit.md` 查看具体条目，人工确认后重新生成干净数据 |
+| 重平衡后训练样本数异常 | 检查 `--max_extra_copies_per_record` 是否过小或 `--target_entity_count` 是否合理 |
+
+### 评价相关
+
+| 问题 | 解决方法 |
+| --- | --- |
+| 模型输出全是空数组 `[]` | 模型尚未学会任务，需要更多训练步数或检查 prompt 格式 |
+| JSON 解析失败比例高 | 模型回答格式不稳定，可调整 `max_new_tokens` 或在 prompt 中加强格式约束 |
+| 某些类别 F1 为 0 | 该类别在验证集中样本极少或模型完全未学到，查看 `analyze_predictions.py` 报告 |
+| Micro F1 和 Macro F1 差距大 | 说明大类（如临床表现）表现好而小类（如其他治疗）表现差，需增强小类数据 |
+
+### 环境相关
+
+| 问题 | 解决方法 |
+| --- | --- |
+| `bitsandbytes` 安装失败 | 需要 Linux 环境 + CUDA，macOS 不支持；可改用 `method: lora` 避开量化 |
+| `flash-attn` 安装失败 | 需要 Ampere 架构 GPU（RTX 30xx/A100+），旧显卡使用默认 `sdpa` 即可 |
+| `accelerate` 多 GPU 不工作 | 运行 `accelerate config` 重新配置，确认 `num_processes` 与可用 GPU 数一致 |
 
 ## 官方参考
 
